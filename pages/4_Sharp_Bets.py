@@ -3,7 +3,7 @@ import pandas as pd
 from services.odds_service import get_sharp_bets
 from models.rating_engine import get_ratings
 
-st.set_page_config(page_title="Sharp Bets – VM 2026", page_icon="💰", layout="wide")
+st.set_page_config(page_title="Sharp Bets – VM 2026", page_icon="💰", layout="centered")
 st.title("💰 Sharp Bets — VM 2026")
 st.markdown("Kamper der modellen har **positiv edge** mot bookmaker. Kelly Criterion angir optimal stake.")
 

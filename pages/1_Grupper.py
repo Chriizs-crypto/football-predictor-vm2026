@@ -4,7 +4,7 @@ from services.data_service import get_groups, get_teams
 from models.poisson_model import predict_from_ratings
 from models.tournament_sim import simulate_group
 
-st.set_page_config(page_title="Grupper – VM 2026", page_icon="📊", layout="wide")
+st.set_page_config(page_title="Grupper – VM 2026", page_icon="📊", layout="centered")
 st.title("📊 VM 2026 — Gruppeoversikt")
 
 groups = get_groups()

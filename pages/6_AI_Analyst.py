@@ -4,7 +4,7 @@ from services.analyst_service import (
     team_insight, match_preview, tournament_dark_horses, overrated_teams
 )
 
-st.set_page_config(page_title="AI Analyst – VM 2026", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="AI Analyst – VM 2026", page_icon="🤖", layout="centered")
 st.title("🤖 AI Analyst — VM 2026")
 
 ratings = get_ratings()
