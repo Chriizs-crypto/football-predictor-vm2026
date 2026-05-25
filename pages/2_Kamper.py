@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
-from src.data_fetcher import get_fixtures_df, get_teams, get_odds
-from src.poisson_model import predict_from_ratings, most_likely_score
+from services.data_service import get_fixtures_df, get_teams, get_odds
+from models.poisson_model import predict_from_ratings, most_likely_score
 
 st.set_page_config(page_title="Kamper – VM 2026", page_icon="⚽", layout="wide")
 st.title("⚽ Kampresultat-prediksjoner")

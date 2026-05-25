@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
-from src.data_fetcher import get_groups, get_teams
-from src.poisson_model import predict_from_ratings
-from src.tournament_sim import simulate_group
+from services.data_service import get_groups, get_teams
+from models.poisson_model import predict_from_ratings
+from models.tournament_sim import simulate_group
 
 st.set_page_config(page_title="Grupper – VM 2026", page_icon="📊", layout="wide")
 st.title("📊 VM 2026 — Gruppeoversikt")

@@ -1,14 +1,14 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-from src.data_fetcher import get_teams
-from src.tournament_sim import simulate_tournament
+from models.rating_engine import get_ratings
+from models.tournament_sim import simulate_tournament
 
 st.set_page_config(page_title="Turneringssimulator – VM 2026", page_icon="🏆", layout="wide")
 st.title("🏆 VM 2026 — Turneringssimulator")
 st.caption("Monte Carlo-simulering — kjører 10 000 turneringer")
 
-ratings = get_teams()
+ratings = get_ratings()
 
 n_sims = st.slider("Antall simuleringer", min_value=1000, max_value=10000, value=5000, step=1000)
 

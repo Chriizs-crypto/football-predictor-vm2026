@@ -2,8 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from src.data_fetcher import get_teams_df, get_teams, get_groups
-from src.poisson_model import predict_from_ratings
+from services.data_service import get_teams_df, get_teams, get_groups
+from models.poisson_model import predict_from_ratings
 
 st.set_page_config(page_title="Research – VM 2026", page_icon="🔬", layout="wide")
 st.title("🔬 Research & Analyse")

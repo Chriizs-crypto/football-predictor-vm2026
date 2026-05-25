@@ -1,5 +1,5 @@
 import streamlit as st
-from src.data_fetcher import is_api_configured
+from services.data_service import api_status
 
 st.set_page_config(
     page_title="VM 2026 Predictor",
@@ -9,8 +9,11 @@ st.set_page_config(
 )
 
 # ── Banner ──────────────────────────────────────────────────────────────────
-if not is_api_configured():
-    st.warning("Demo-modus aktiv — data er simulert. Legg til API-nøkler for live data.", icon="ℹ️")
+status = api_status()
+if not status["football_data"] and not status["odds_api"]:
+    st.warning("Demo-modus: Ingen API-nøkler konfigurert. Se .env.example.", icon="ℹ️")
+elif not status["odds_api"]:
+    st.info("Odds API ikke konfigurert — bruker demo-odds for value bets.", icon="💡")
 
 # ── Hero ────────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -44,7 +47,7 @@ with b1:
     st.caption("Prediksjoner, scoreline-heatmap, over/under og BTTS")
 
 with b2:
-    st.page_link("pages/4_Value_Bets.py", label="💰  Finn value bets",    use_container_width=True)
+    st.page_link("pages/4_Sharp_Bets.py", label="💰  Sharp Bets",         use_container_width=True)
     st.caption("Edge mot bookmaker-odds + Kelly Criterion stake")
 
 with b3:
@@ -61,7 +64,8 @@ with b5:
     st.caption("H2H, lagratinger og gruppesammenligning")
 
 with b6:
-    st.markdown("")  # tom slot — klar for AI Analyst i neste versjon
+    st.page_link("pages/6_AI_Analyst.py", label="🤖  AI Analyst",         use_container_width=True)
+    st.caption("Regelbasert AI-analyse — lag, kamper og dark horses")
 
 st.markdown("---")
 st.caption("Modell: Poisson-distribusjon + Monte Carlo (10 000 simuleringer) · Poisson-kalibrert mot historiske VM-data")
