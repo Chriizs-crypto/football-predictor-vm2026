@@ -13,6 +13,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# ── Apple PWA / mobile web app meta-tags ────────────────────────────────────
+st.markdown("""
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VM 2026">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0E1117">
+""", unsafe_allow_html=True)
+
 # ── CSS: mobilvennlig padding ────────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -181,4 +190,16 @@ with col2:
     st.page_link("pages/5_Research.py",   label="🔬 Research & analyse",  use_container_width=True)
 
 st.markdown("---")
+
+# ── Del appen ────────────────────────────────────────────────────────────────
+col_a, col_b = st.columns(2)
+with col_a:
+    st.page_link("pages/0_Installer_App.py", label="📲 Legg på hjemskjerm", use_container_width=True)
+with col_b:
+    st.markdown("""
+<div style="font-size:0.82rem; color:#666; padding-top:0.5rem;">
+Del URL-en med venner → de åpner i Safari/Chrome og legger til på hjemskjermen
+</div>
+""", unsafe_allow_html=True)
+
 st.caption("Modell: Poisson + Monte Carlo · Historisk VM-kalibrering · Gamble ansvarlig 🎗️")
