@@ -1,7 +1,5 @@
 import streamlit as st
-import qrcode
-import qrcode.image.svg
-from io import BytesIO
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Installer appen — VM 2026",
@@ -11,89 +9,143 @@ st.set_page_config(
 )
 
 st.title("📲 Legg appen på hjemskjermen")
-st.markdown("Du trenger ikke laste ned noe fra App Store. Appen fungerer som en nettapp — men ser ut og føles som en vanlig app når du legger den på hjemskjermen.")
+st.markdown("Ingen App Store nødvendig. Scan QR-koden eller følg instruksjonene under.")
 
 st.markdown("---")
 
-# ── URL-input ──────────────────────────────────────────────────────────────
-st.subheader("Steg 1 — Finn appens URL")
-app_url = st.text_input(
-    "Lim inn appens URL her (fra adressefeltet i nettleseren)",
-    placeholder="https://din-app.streamlit.app",
-    help="Åpne appen i nettleseren og kopier URL-en fra adressefeltet",
-)
+# ── Auto QR-kode (henter sin egen URL via JavaScript) ───────────────────────
+st.subheader("📷 QR-kode — scan med telefonen")
+st.caption("Koden genereres automatisk for denne siden")
 
-if app_url:
-    # ── QR-kode ───────────────────────────────────────────────────────────
-    st.subheader("Steg 2 — Scan QR-koden")
-    st.caption("Del QR-koden med vennene dine så de kan åpne appen på sin telefon")
+components.html("""
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0E1117; display: flex; flex-direction: column;
+         align-items: center; justify-content: center; margin: 0; padding: 16px; }
+  #qrcode canvas, #qrcode img { border-radius: 12px; }
+  #url-label { color: #888; font-size: 0.78rem; margin-top: 10px;
+                font-family: sans-serif; word-break: break-all; text-align: center; max-width: 260px; }
+  #status { color: #1DB954; font-size: 0.85rem; font-family: sans-serif; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div id="status">Genererer QR-kode...</div>
+<div id="qrcode"></div>
+<div id="url-label"></div>
 
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_M,
-        box_size=8,
-        border=2,
-    )
-    qr.add_data(app_url)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="#1DB954", back_color="#0E1117")
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    buf.seek(0)
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+  // Hent URL fra foreldrevinduet (Streamlit-appen)
+  var appUrl = "";
+  try {
+    appUrl = window.parent.location.href.split("?")[0].split("#")[0];
+    // Fjern /0_Installer_App-segmentet for å få rot-URL
+    appUrl = appUrl.replace(/\\/0_Installer_App$/, "").replace(/\\/0_Installer_App\\/$/, "");
+  } catch(e) {
+    appUrl = window.location.href;
+  }
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.image(buf, use_container_width=True)
+  var el = document.getElementById("qrcode");
+  var lbl = document.getElementById("url-label");
+  var status = document.getElementById("status");
 
-    st.markdown("---")
-
-# ── iPhone-instruksjoner ───────────────────────────────────────────────────
-st.subheader("📱 iPhone (Safari)")
-st.markdown("""
-1. Åpne appen i **Safari** (ikke Chrome eller Firefox)
-2. Trykk på **Del-ikonet** nederst på skjermen &nbsp;`⬆`
-3. Scroll ned og trykk **"Legg til på Hjem-skjerm"**
-4. Gi den et navn (f.eks. *VM 2026*) og trykk **Legg til**
-
-Appen vises nå som et ikon på hjemskjermen din — akkurat som en vanlig app. ✅
-""")
-
-with st.expander("Se steg-for-steg bilder (tekst)"):
-    st.markdown("""
-    **I Safari:**
-    - Adressefeltet øverst viser URL-en
-    - Del-ikonet (firkant med pil opp) er **nederst i midten** av skjermen
-    - "Legg til på Hjem-skjerm" finner du ved å scrolle ned i delelisten
-
-    **Tips:** Skru telefonen til liggende modus hvis del-ikonet er vanskelig å se.
-    """)
-
-st.markdown("---")
-
-# ── Android-instruksjoner ──────────────────────────────────────────────────
-st.subheader("🤖 Android (Chrome)")
-st.markdown("""
-1. Åpne appen i **Chrome**
-2. Trykk på **⋮** (tre prikker øverst til høyre)
-3. Trykk **"Legg til på startskjermen"** eller **"Installer app"**
-4. Bekreft med **Legg til**
-
-Appen vises nå på hjemskjermen din. ✅
-""")
+  if (appUrl && appUrl.startsWith("http")) {
+    new QRCode(el, {
+      text: appUrl,
+      width: 220,
+      height: 220,
+      colorDark: "#1DB954",
+      colorLight: "#0E1117",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    lbl.textContent = appUrl;
+    status.textContent = "✅ Scan med telefonen din";
+  } else {
+    status.textContent = "Kunne ikke hente URL automatisk";
+    status.style.color = "#ff4b4b";
+  }
+</script>
+</body>
+</html>
+""", height=320)
 
 st.markdown("---")
 
-# ── Desktop-snarvei ────────────────────────────────────────────────────────
-st.subheader("💻 Desktop (Chrome/Edge)")
-st.markdown("""
-I Chrome eller Edge kan du installere appen som en desktop-app:
+# ── Enhetsdeteksjon + instruksjoner ──────────────────────────────────────────
+# JavaScript-basert enhetsdeteksjon som viser riktig instruksjon
+components.html("""
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { background: #0E1117; font-family: sans-serif; color: #FAFAFA;
+         margin: 0; padding: 8px 0; }
+  .card { background: #1A1D27; border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 1rem; }
+  .card h3 { margin: 0 0 0.7rem 0; font-size: 1.05rem; color: #1DB954; }
+  .step { display: flex; gap: 10px; margin-bottom: 0.5rem; font-size: 0.9rem; line-height: 1.4; }
+  .num { background: #1DB954; color: #000; border-radius: 50%; width: 22px; height: 22px;
+         display: flex; align-items: center; justify-content: center;
+         font-weight: 700; font-size: 0.8rem; flex-shrink: 0; margin-top: 1px; }
+  .tip { font-size: 0.8rem; color: #888; margin-top: 0.6rem; }
+  .highlight { color: #1DB954; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="instructions"></div>
+<script>
+  var ua = navigator.userAgent;
+  var isIOS = /iPad|iPhone|iPod/.test(ua);
+  var isAndroid = /Android/.test(ua);
+  var el = document.getElementById("instructions");
 
-1. Åpne appen i nettleseren
-2. Se etter **installasjons-ikonet** (⊕) helt til høyre i adressefeltet
-3. Klikk på det og velg **"Installer"**
-
-Appen åpnes da i sitt eget vindu uten nettleser-rammer.
-""")
+  if (isIOS) {
+    el.innerHTML = `
+      <div class="card">
+        <h3>📱 iPhone / iPad — Safari</h3>
+        <div class="step"><div class="num">1</div><div>Åpne appen i <span class="highlight">Safari</span> — ikke Chrome eller Firefox</div></div>
+        <div class="step"><div class="num">2</div><div>Trykk på <span class="highlight">Del-ikonet ⬆</span> nederst på skjermen</div></div>
+        <div class="step"><div class="num">3</div><div>Scroll ned og trykk <span class="highlight">"Legg til på Hjem-skjerm"</span></div></div>
+        <div class="step"><div class="num">4</div><div>Gi den navnet <span class="highlight">VM 2026</span> og trykk <span class="highlight">Legg til</span></div></div>
+        <div class="tip">✅ Et VM-ikon dukker opp på hjemskjermen — åpner fullskjerm som en app</div>
+      </div>`;
+  } else if (isAndroid) {
+    el.innerHTML = `
+      <div class="card">
+        <h3>🤖 Android — Chrome</h3>
+        <div class="step"><div class="num">1</div><div>Åpne appen i <span class="highlight">Chrome</span></div></div>
+        <div class="step"><div class="num">2</div><div>Trykk på <span class="highlight">⋮</span> (tre prikker) øverst til høyre</div></div>
+        <div class="step"><div class="num">3</div><div>Velg <span class="highlight">"Legg til på startskjermen"</span></div></div>
+        <div class="step"><div class="num">4</div><div>Bekreft med <span class="highlight">Legg til</span></div></div>
+        <div class="tip">✅ Appen vises på startskjermen din</div>
+      </div>`;
+  } else {
+    el.innerHTML = `
+      <div class="card">
+        <h3>📱 iPhone / iPad — Safari</h3>
+        <div class="step"><div class="num">1</div><div>Åpne appen i <span class="highlight">Safari</span></div></div>
+        <div class="step"><div class="num">2</div><div>Trykk <span class="highlight">Del-ikonet ⬆</span> nederst</div></div>
+        <div class="step"><div class="num">3</div><div>Velg <span class="highlight">"Legg til på Hjem-skjerm"</span></div></div>
+        <div class="step"><div class="num">4</div><div>Trykk <span class="highlight">Legg til</span></div></div>
+      </div>
+      <div class="card">
+        <h3>🤖 Android — Chrome</h3>
+        <div class="step"><div class="num">1</div><div>Åpne appen i <span class="highlight">Chrome</span></div></div>
+        <div class="step"><div class="num">2</div><div>Trykk <span class="highlight">⋮</span> øverst til høyre</div></div>
+        <div class="step"><div class="num">3</div><div>Velg <span class="highlight">"Legg til på startskjermen"</span></div></div>
+      </div>
+      <div class="card">
+        <h3>💻 Desktop (Chrome/Edge)</h3>
+        <div class="step"><div class="num">1</div><div>Se etter <span class="highlight">⊕-ikonet</span> i adressefeltet til høyre</div></div>
+        <div class="step"><div class="num">2</div><div>Klikk og velg <span class="highlight">"Installer"</span></div></div>
+        <div class="tip">Appen åpnes da i sitt eget vindu — uten nettleser-rammer</div>
+      </div>`;
+  }
+</script>
+</body>
+</html>
+""", height=420)
 
 st.markdown("---")
 st.caption("VM 2026 Predictor · Poisson + Monte Carlo · Delt med venner via nettlink")
