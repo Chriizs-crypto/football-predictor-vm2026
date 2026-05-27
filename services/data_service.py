@@ -1,35 +1,55 @@
 """
-Sentralt datanivå. Kombinerer API-data med demo-fallback og cache.
-Alle pages og models importerer kun herfra.
+Sentralt datanivå. Kildeprioritet:
+  1. API-Football (RapidAPI) — live, 100 req/dag gratis
+  2. openfootball/worldcup.json — gratis fallback, oppdateres etter kampene
+  3. Demo-data — alltid tilgjengelig
 """
 import pandas as pd
 from services.cache_service import get as cache_get, set as cache_set
-from apis.football_data_api import get_wc_matches, normalize_match, is_configured as fd_configured
+from apis.api_football import (
+    get_fixtures as af_get_fixtures,
+    normalize_fixture,
+    is_configured as af_configured,
+)
+from apis.openfootball_api import get_fixtures as of_get_fixtures
 from apis.odds_api import get_odds_map, is_configured as odds_configured
 from data.demo_data import GROUPS, TEAM_RATINGS, get_group_fixtures, HISTORICAL_WC_RESULTS, DEMO_ODDS
 
 
 def api_status() -> dict:
     return {
-        "football_data": fd_configured(),
+        "api_football":  af_configured(),
         "odds_api":      odds_configured(),
+        "football_data": af_configured(),   # bakoverkompatibilitet med app.py-banner
     }
 
 
 def get_fixtures(use_cache: bool = True) -> list[dict]:
+    """
+    Henter fixtures med fallback-kjede:
+    API-Football → openfootball → demo-data
+    """
     cache_key = "wc2026_fixtures"
     if use_cache:
         cached = cache_get(cache_key)
         if cached:
             return cached
 
-    if fd_configured():
-        raw = get_wc_matches()
+    # 1. API-Football
+    if af_configured():
+        raw = af_get_fixtures()
         if raw:
-            fixtures = [normalize_match(m) for m in raw]
+            fixtures = [normalize_fixture(f) for f in raw]
             cache_set(cache_key, fixtures, ttl=1800)
             return fixtures
 
+    # 2. openfootball (gratis, ingen nøkkel)
+    of_fixtures = of_get_fixtures()
+    if of_fixtures:
+        cache_set(cache_key, of_fixtures, ttl=3600)
+        return of_fixtures
+
+    # 3. Demo-data
     return get_group_fixtures()
 
 
@@ -71,3 +91,13 @@ def get_odds(home: str, away: str) -> dict | None:
             return odds_map[key]
 
     return DEMO_ODDS.get((home, away)) or DEMO_ODDS.get((away, home))
+
+
+def get_data_source() -> str:
+    """Returner hvilken datakilde som er aktiv."""
+    if af_configured():
+        return "API-Football (live)"
+    of_fixtures = of_get_fixtures()
+    if of_fixtures:
+        return "openfootball (gratis)"
+    return "Demo-data"
