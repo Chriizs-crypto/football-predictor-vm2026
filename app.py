@@ -54,7 +54,9 @@ st.markdown("""
 # ── API-banner ───────────────────────────────────────────────────────────────
 status = api_status()
 if not status["football_data"] and not status["odds_api"]:
-    st.caption("⚙️ Demo-modus — legg til API-nøkler for live data")
+    st.caption("⚙️ Demo-modus — ingen API-nøkler konfigurert")
+elif status["football_data"]:
+    st.caption("🔑 API-nøkkel konfigurert — sjekk ⚙️ API Status-siden for detaljer")
 
 # ── Header ───────────────────────────────────────────────────────────────────
 today = datetime.date.today()
