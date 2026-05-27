@@ -1,7 +1,7 @@
 """
-Klient for API-Football via RapidAPI.
-Gratis tier: 100 requests/dag.
-Registrer på rapidapi.com → søk "API-Football" → abonner på Free-plan.
+Klient for API-Football (api-sports.io).
+Gratis tier: 100 requests/dag, dekker VM 2026.
+Registrer gratis på: https://www.api-football.com/
 """
 import os
 import requests
@@ -9,19 +9,19 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-BASE_URL  = "https://api-football-v1.p.rapidapi.com/v3"
-API_KEY   = os.getenv("API_FOOTBALL_KEY", "")
-HEADERS   = {
-    "X-RapidAPI-Key":  API_KEY,
-    "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
-}
+BASE_URL = "https://v3.football.api-sports.io"
+API_KEY  = os.getenv("API_FOOTBALL_KEY", "")
 
-WC_LEAGUE_ID = 1      # FIFA World Cup
+WC_LEAGUE_ID = 1
 WC_SEASON    = 2026
 
 
 def is_configured() -> bool:
     return bool(API_KEY)
+
+
+def _headers() -> dict:
+    return {"x-apisports-key": API_KEY}
 
 
 def _get(endpoint: str, params: dict) -> dict:
@@ -30,7 +30,7 @@ def _get(endpoint: str, params: dict) -> dict:
     try:
         r = requests.get(
             f"{BASE_URL}/{endpoint}",
-            headers={**HEADERS, "X-RapidAPI-Key": API_KEY},
+            headers=_headers(),
             params=params,
             timeout=10,
         )
