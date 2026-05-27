@@ -30,22 +30,30 @@ CONTINENTAL_BOOST = {
 }
 
 TEAM_CONFEDERATION = {
+    # CONMEBOL
     "Brazil": "CONMEBOL", "Argentina": "CONMEBOL", "Colombia": "CONMEBOL",
-    "Ecuador": "CONMEBOL", "Uruguay": "CONMEBOL", "Venezuela": "CONMEBOL",
-    "Chile": "CONMEBOL", "Peru": "CONMEBOL",
+    "Ecuador": "CONMEBOL", "Uruguay": "CONMEBOL", "Paraguay": "CONMEBOL",
+    # UEFA
     "France": "UEFA", "Germany": "UEFA", "Spain": "UEFA", "England": "UEFA",
-    "Portugal": "UEFA", "Netherlands": "UEFA", "Italy": "UEFA", "Croatia": "UEFA",
-    "Denmark": "UEFA", "Austria": "UEFA", "Turkey": "UEFA", "Serbia": "UEFA",
-    "Switzerland": "UEFA", "Scotland": "UEFA", "Hungary": "UEFA", "Ukraine": "UEFA",
-    "Morocco": "CAF", "Senegal": "CAF", "Nigeria": "CAF", "Ivory Coast": "CAF",
-    "Egypt": "CAF", "Cameroon": "CAF", "South Africa": "CAF", "Tunisia": "CAF",
-    "Algeria": "CAF",
+    "Portugal": "UEFA", "Netherlands": "UEFA", "Croatia": "UEFA",
+    "Austria": "UEFA", "Turkey": "UEFA", "Switzerland": "UEFA",
+    "Scotland": "UEFA", "Norway": "UEFA", "Sweden": "UEFA",
+    "Czech Republic": "UEFA", "Bosnia & Herzegovina": "UEFA",
+    # CAF
+    "Morocco": "CAF", "Senegal": "CAF", "Ivory Coast": "CAF",
+    "Egypt": "CAF", "South Africa": "CAF", "Tunisia": "CAF",
+    "Algeria": "CAF", "Ghana": "CAF", "DR Congo": "CAF", "Cape Verde": "CAF",
+    # AFC
     "Japan": "AFC", "South Korea": "AFC", "Iran": "AFC", "Saudi Arabia": "AFC",
-    "Australia": "AFC", "Iraq": "AFC", "China": "AFC", "Uzbekistan": "AFC",
+    "Australia": "AFC", "Iraq": "AFC", "Uzbekistan": "AFC",
+    "Qatar": "AFC", "Jordan": "AFC",
+    # CONCACAF
     "USA": "CONCACAF", "Canada": "CONCACAF", "Mexico": "CONCACAF",
-    "Panama": "CONCACAF", "Honduras": "CONCACAF", "Jamaica": "CONCACAF",
-    "Costa Rica": "CONCACAF", "El Salvador": "CONCACAF",
+    "Panama": "CONCACAF", "Haiti": "CONCACAF", "Curaçao": "CONCACAF",
+    # OFC
     "New Zealand": "OFC",
+    # Belgium (UEFA — explicitly listed)
+    "Belgium": "UEFA",
 }
 
 
