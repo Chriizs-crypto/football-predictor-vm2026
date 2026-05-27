@@ -1,6 +1,6 @@
 import streamlit as st
 import datetime
-from services.data_service import api_status, get_fixtures, get_odds
+from services.data_service import get_data_source, get_fixtures, get_odds
 from services.odds_service import get_sharp_bets
 from models.rating_engine import get_ratings
 from models.poisson_model import predict_from_ratings, most_likely_score
@@ -51,12 +51,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ── API-banner ───────────────────────────────────────────────────────────────
-status = api_status()
-if not status["football_data"] and not status["odds_api"]:
-    st.caption("⚙️ Demo-modus — ingen API-nøkler konfigurert")
-elif status["football_data"]:
-    st.caption("🔑 API-nøkkel konfigurert — sjekk ⚙️ API Status-siden for detaljer")
+# ── Datakilde-banner ─────────────────────────────────────────────────────────
+source = get_data_source()
+if "live" in source:
+    st.caption(f"📡 {source}")
+elif "gratis" in source:
+    st.caption(f"✅ {source} — oppdateres etter kampene")
+else:
+    st.caption("🧮 Prediksjoner basert på ELO-ratinger og Poisson-modell · Live-data aktiveres 11. juni")
 
 # ── Header ───────────────────────────────────────────────────────────────────
 today = datetime.date.today()
