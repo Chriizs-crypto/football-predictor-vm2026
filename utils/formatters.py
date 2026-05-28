@@ -8,19 +8,23 @@ def odds_to_implied(odds: float) -> float:
 
 def flag_emoji(team: str) -> str:
     flags = {
+        # VM 2026 — alle 48 kvalifiserte lag
         "Brazil": "🇧🇷", "France": "🇫🇷", "Argentina": "🇦🇷", "Spain": "🇪🇸",
         "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Germany": "🇩🇪", "Portugal": "🇵🇹", "Netherlands": "🇳🇱",
-        "Italy": "🇮🇹", "Croatia": "🇭🇷", "Colombia": "🇨🇴", "Uruguay": "🇺🇾",
-        "Denmark": "🇩🇰", "Morocco": "🇲🇦", "Japan": "🇯🇵", "Serbia": "🇷🇸",
+        "Belgium": "🇧🇪", "Croatia": "🇭🇷", "Colombia": "🇨🇴", "Uruguay": "🇺🇾",
+        "Norway": "🇳🇴", "Sweden": "🇸🇪", "Morocco": "🇲🇦", "Japan": "🇯🇵",
         "Mexico": "🇲🇽", "USA": "🇺🇸", "South Korea": "🇰🇷", "Ecuador": "🇪🇨",
         "Canada": "🇨🇦", "Turkey": "🇹🇷", "Austria": "🇦🇹", "Senegal": "🇸🇳",
-        "Switzerland": "🇨🇭", "Venezuela": "🇻🇪", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Ukraine": "🇺🇦",
-        "Hungary": "🇭🇺", "Australia": "🇦🇺", "Cameroon": "🇨🇲", "Iran": "🇮🇷",
-        "Nigeria": "🇳🇬", "Ivory Coast": "🇨🇮", "Algeria": "🇩🇿", "Tunisia": "🇹🇳",
-        "Egypt": "🇪🇬", "South Africa": "🇿🇦", "Saudi Arabia": "🇸🇦",
-        "Costa Rica": "🇨🇷", "Honduras": "🇭🇳", "Jamaica": "🇯🇲", "Panama": "🇵🇦",
-        "Iraq": "🇮🇶", "China": "🇨🇳", "Uzbekistan": "🇺🇿",
-        "El Salvador": "🇸🇻", "New Zealand": "🇳🇿",
+        "Switzerland": "🇨🇭", "Scotland": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Australia": "🇦🇺", "Iran": "🇮🇷",
+        "Ivory Coast": "🇨🇮", "Algeria": "🇩🇿", "Tunisia": "🇹🇳", "Egypt": "🇪🇬",
+        "South Africa": "🇿🇦", "Saudi Arabia": "🇸🇦", "Panama": "🇵🇦", "Iraq": "🇮🇶",
+        "Uzbekistan": "🇺🇿", "New Zealand": "🇳🇿", "Paraguay": "🇵🇾",
+        "Czech Republic": "🇨🇿", "Bosnia & Herzegovina": "🇧🇦", "Qatar": "🇶🇦",
+        "Haiti": "🇭🇹", "Curaçao": "🇨🇼", "Sweden": "🇸🇪", "Ghana": "🇬🇭",
+        "DR Congo": "🇨🇩", "Cape Verde": "🇨🇻", "Jordan": "🇯🇴",
+        # Ekstra / historiske
+        "Denmark": "🇩🇰", "Italy": "🇮🇹", "Serbia": "🇷🇸", "Ukraine": "🇺🇦",
+        "Nigeria": "🇳🇬", "Cameroon": "🇨🇲", "China": "🇨🇳",
     }
     return flags.get(team, "🏳️")
 
